@@ -1,0 +1,4 @@
+interface:
+  display_name: "照片宠物制作规范"
+  short_description: "按照片制作真人桌面宠物，复用动作流程、统一尺寸并输出无描边动画预览"
+  default_prompt: "使用 $photo-pet，按既定规范将这张参考图制作成完整的桌面宠物。"
