@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jev 模型路由"
+  short_description: "配置 Jev 分类场景、概率阈值、模型权重与流量分配，并按规则调用目标模型"
+  default_prompt: "使用 $jev-router，按我的场景与概率规则配置模型路由，并验证选择结果。"

@@ -1,0 +1,17 @@
+{
+  "model": "jev-offline-fixture",
+  "answers": {
+    "complexity": {
+      "type": "choice", "choice": "simple", "confidence": 0.8,
+      "probabilities": {"simple": 0.9, "medium": 0.08, "complex": 0.02}
+    },
+    "coding": {"type": "noul", "noul": 0.05},
+    "reasoning": {"type": "noul", "noul": 0.1},
+    "context_quality": {
+      "type": "score", "score": 2.0, "confidence": 1.0,
+      "probabilities": {"0": 0.0, "1": 0.0, "2": 1.0},
+      "legend": {"0": "缺失关键资料", "1": "部分信息缺失", "2": "信息充分"}
+    }
+  },
+  "usage": {"input_tokens": 0, "output_tokens": 0}
+}

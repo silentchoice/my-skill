@@ -1,6 +1,6 @@
 # my-skill
 
-可复用的 Codex skills，包含照片宠物制作规范与透明动画预览工具。
+可复用的 Codex skills，包含照片宠物制作、透明动画预览工具与 Jev 模型路由。
 
 ## photo-pet
 
@@ -48,3 +48,42 @@ python photo-pet/scripts/render_apng.py --atlas /path/to/spritesheet.webp --outp
 视线预览采用每姿势 180 毫秒，实际桌面宠物视线由指针位置驱动。APNG 需要支持动画 PNG 的查看器。
 
 制作规范中的统一缩放是此工作流的默认约定；使用者明确要求保留原始像素或禁止变换时，应遵循其要求。安装、公开发布等操作仍需遵守当前任务授权。
+
+## jev-router
+
+通过 TypeSafe Jev 判断任务复杂度、是否代码开发、是否需要多步推理等特征，再由可编辑规则选择目标模型。
+
+- 在 YAML 中新增或修改判断场景、分类标准与概率阈值。
+- 支持首次命中规则、`all/any` 多条件组合、模型适配加权与 80/20 等流量分配。
+- 返回命中规则、概率信号和加权贡献，支持异常备用策略。
+- 支持只做路由判断，或调用配置的 Chat Completions 兼容 API 生成回答。
+
+### 安装与使用
+
+将仓库中的 `jev-router` 目录复制到 `$CODEX_HOME/skills/`；未设置 `CODEX_HOME` 时使用 `~/.codex/skills/`。已有同名目录时先检查再更新。
+
+```text
+使用 $jev-router，按任务复杂度和是否代码开发配置模型路由。
+```
+
+编辑 [路由配置](jev-router/config/router.yaml)，详见 [中文配置与接入说明](jev-router/references/configuration.md) 和 [SKILL.md](jev-router/SKILL.md)。
+
+克隆仓库后可以先运行无需密钥的离线示例：
+
+```sh
+uv run --script jev-router/scripts/router.py validate
+uv run --script jev-router/scripts/router.py decide --response-file jev-router/examples/complex-response.json
+```
+
+默认复杂示例选择 `strong`，简单示例选择 `fast`。真实调用需在本机设置 `TYPESAFE_API_KEY`，以及目标服务的 `MODEL_API_URL`、`MODEL_API_KEY`、`FAST_MODEL`、`CODE_MODEL`、`STRONG_MODEL`。配置文件只保存环境变量名称，不保存密钥。
+
+### 验证与范围
+
+需要 Python 3.10+；`uv run --script` 自动准备 PyYAML 6.x 依赖。运行测试：
+
+```sh
+uv run --with 'PyYAML>=6.0.3,<7' python -m unittest discover -s jev-router/tests -v
+```
+
+已通过 22 项单元及本地 HTTP 集成测试；未使用真实服务凭据验证分类准确率或付费模型调用。加权适配分不是回答正确率。该执行器生成文本，不会切换当前宿主会话模型，也不会执行代码编辑或 agent 工具循环。
+
